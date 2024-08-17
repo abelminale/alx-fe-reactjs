@@ -1,7 +1,7 @@
 const Footer = () => {
     return ( 
         <footer>
-             <p>© 2023 City Lovers</p>
+             <p style={{ border: '1px solid gray', padding: '10px', margin: '10px' }}>© 2023 City Lovers</p>
         </footer>
      );
 }
