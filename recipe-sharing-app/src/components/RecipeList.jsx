@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for routing
 import useRecipeStore from '../recipeStore';
 import SearchBar from './SearchBar';
 import IngredientFilter from './IngredientFilter';
@@ -21,7 +22,9 @@ const RecipeList = () => {
       {recipes.length > 0 ? (
         recipes.map((recipe) => (
           <div key={recipe.id}>
-            <h3>{recipe.title}</h3>
+            <h3>
+              <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link> {/* Link to recipe details */}
+            </h3>
             <p>{recipe.description}</p>
           </div>
         ))
