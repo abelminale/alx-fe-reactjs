@@ -1,4 +1,4 @@
-// src/components/PostsComponent.js
+// src/components/PostsComponent.jsx
 import React from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -36,3 +36,4 @@ const PostsComponent = () => {
 };
 
 export default PostsComponent;
+
