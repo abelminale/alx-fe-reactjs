@@ -11,7 +11,7 @@ const RegistrationForm = () => {
       alert('Please fill in all fields');
       return;
     }
-    // Simulate API call
+   
     console.log('User Registered:', { username, email, password });
   };
 
