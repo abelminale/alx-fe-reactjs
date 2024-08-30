@@ -1,4 +1,4 @@
-// src/components/PostsComponent.jsx
+
 import React from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -9,7 +9,12 @@ const fetchPosts = async () => {
 };
 
 const PostsComponent = () => {
-  const { data, error, isLoading, isError, refetch } = useQuery('posts', fetchPosts);
+  const { data, error, isLoading, isError, refetch } = useQuery('posts', fetchPosts, {
+    cacheTime: 5 * 60 * 1000,           // Cache the data for 5 minutes
+    staleTime: 0,                       // Consider data fresh for 0 ms, meaning it will refetch on every mount
+    refetchOnWindowFocus: true,         // Refetch data when the window is refocused
+    keepPreviousData: true,             // Keep previous data while fetching new data
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -36,4 +41,3 @@ const PostsComponent = () => {
 };
 
 export default PostsComponent;
-
