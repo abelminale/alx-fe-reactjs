@@ -6,8 +6,6 @@ import Profile from './components/Profile';
 import BlogPost from './components/BlogPost';
 import ProtectedRoute from './components/ProtectedRoute';
 
-const isAuthenticated = true; // Simulate authentication
-
 function App() {
   return (
     <Router>
@@ -15,9 +13,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route
           path="/profile/*"
-          element={<ProtectedRoute element={<Profile />} isAuthenticated={isAuthenticated} />}
+          element={<ProtectedRoute element={<Profile />} />}
         />
-        {/* Update the dynamic route path to use "/blog/:id" */}
         <Route path="/blog/:id" element={<BlogPost />} />
       </Routes>
     </Router>
