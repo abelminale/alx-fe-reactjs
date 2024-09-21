@@ -20,15 +20,17 @@ export const Search = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setUserData(null); // Clear previous user data
+    setUserList([]); // Clear previous search results
+
     try {
       const user = await fetchUserData(formData.username);
       setUserData(user);
-      setUserList([]); // Clear advanced search results if doing basic search
     } catch (err) {
       setError("Looks like we can't find the user.");
-      setUserData(null);
+    } finally {
+      setLoading(false); // Ensure loading state is reset
     }
-    setLoading(false);
   };
 
   // Handle form submission for advanced search
@@ -36,19 +38,21 @@ export const Search = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setUserList([]); // Clear previous search results
+    setUserData(null); // Clear previous user data
+
     try {
       const users = await searchUsers(formData);
       if (users.items.length === 0) {
         setError("Looks like we can't find any users.");
-        setUserList([]);
       } else {
         setUserList(users.items);
       }
     } catch (err) {
       setError("Looks like we can't find any users.");
-      setUserList([]);
+    } finally {
+      setLoading(false); // Ensure loading state is reset
     }
-    setLoading(false);
   };
 
   return (
@@ -82,10 +86,10 @@ export const Search = () => {
         <button type="submit">Advanced Search</button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+      {loading && <p>Loading...</p>} {/* Show loading message */}
+      {error && <p className="text-red-500">{error}</p>} {/* Show error message */}
 
-      {userData && (
+      {userData && ( // Conditional rendering for user data
         <div className="user-details">
           <img src={userData.avatar_url} alt={userData.login} />
           <h2>{userData.name || userData.login}</h2>
@@ -96,7 +100,7 @@ export const Search = () => {
         </div>
       )}
 
-      {userList.length > 0 && (
+      {userList.length > 0 && ( // Conditional rendering for advanced search results
         <div className="user-list">
           {userList.map((user) => (
             <div key={user.id}>
