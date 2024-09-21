@@ -11,28 +11,8 @@ export const Search = () => {
 
   // Handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target; // target.value to capture input value
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  // Handle form submission for advanced search
-  const handleAdvancedSearch = async (e) => {
-    e.preventDefault(); // preventDefault to stop form from reloading the page
-    setLoading(true);
-    setError('');
-    try {
-      const users = await searchUsers(formData);
-      if (users.items.length === 0) {
-        setError("Looks like we can't find the user.");
-        setUserList([]);
-      } else {
-        setUserList(users.items);
-      }
-    } catch (err) {
-      setError("Looks like we can't find the user.");
-      setUserList([]);
-    }
-    setLoading(false);
   };
 
   // Handle basic search for specific username
@@ -45,26 +25,46 @@ export const Search = () => {
       setUserData(user);
       setUserList([]); // Clear advanced search results if doing basic search
     } catch (err) {
-      setError("Looks like we can't find the user.");
+      setError("Looks like we can't find the user."); // Set error message
       setUserData(null);
+    }
+    setLoading(false);
+  };
+
+  // Handle form submission for advanced search
+  const handleAdvancedSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const users = await searchUsers(formData);
+      if (users.items.length === 0) {
+        setError("Looks like we can't find any users."); // Set error message for no results
+        setUserList([]);
+      } else {
+        setUserList(users.items);
+      }
+    } catch (err) {
+      setError("Looks like we can't find any users."); // Set error message for API error
+      setUserList([]);
     }
     setLoading(false);
   };
 
   return (
     <div className="search-container">
-      <form onSubmit={handleBasicSearch}> {/* Basic search form */}
+      <form onSubmit={handleBasicSearch}>
         <input
           type="text"
           name="username"
           placeholder="Search GitHub username"
           value={formData.username}
-          onChange={handleInputChange} // Handle changes with target.value
+          onChange={handleInputChange}
         />
         <button type="submit">Search User</button>
       </form>
 
-      <form onSubmit={handleAdvancedSearch}> {/* Advanced search form */}
+      <form onSubmit={handleAdvancedSearch}>
         <input
           type="text"
           name="location"
@@ -83,9 +83,8 @@ export const Search = () => {
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>} {/* Display error message if there's an error */}
+      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
 
-      {/* Basic search results */}
       {userData && (
         <div className="user-details">
           <img src={userData.avatar_url} alt={userData.login} />
@@ -97,7 +96,6 @@ export const Search = () => {
         </div>
       )}
 
-      {/* Advanced search results */}
       {userList.length > 0 && (
         <div className="user-list">
           {userList.map((user) => (
