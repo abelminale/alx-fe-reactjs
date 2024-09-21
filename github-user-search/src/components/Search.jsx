@@ -25,7 +25,7 @@ export const Search = () => {
       const user = await fetchUserData(formData.username);
       setUserData(user);
     } catch (err) {
-      setError("Looks like we can't find the user.");
+      setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export const Search = () => {
         setUserList(users.items);
       }
     } catch (err) {
-      setError("Looks like we cant find the user");
+      setError("Looks like we can't find any users.");
     } finally {
       setLoading(false);
     }
