@@ -1,12 +1,8 @@
 import { Link } from 'react-router-dom';
 
-// Inside the map for displaying recipes
-<Link to={`/recipe/${recipe.id}`} key={recipe.id}>
-  <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-    <img src={recipe.image} alt={recipe.title} className="w-full h-32 object-cover" />
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
-      <p className="text-gray-600">{recipe.summary}</p>
-    </div>
-  </div>
-</Link>
+// Somewhere at the top or bottom of the HomePage
+<div className="text-center mb-6">
+  <Link to="/add-recipe" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+    Add a New Recipe
+  </Link>
+</div>
