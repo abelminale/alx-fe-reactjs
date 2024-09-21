@@ -44,7 +44,7 @@ export const Search = () => {
     try {
       const users = await searchUsers(formData);
       if (users.items.length === 0) {
-        setError("Looks like we cant find any users.");
+        setError("Looks like we cant find the user");
       } else {
         setUserList(users.items);
       }
