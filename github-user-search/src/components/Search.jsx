@@ -1,47 +1,68 @@
-// src/components/Search.jsx
 import React, { useState } from 'react';
-import { searchGitHubUser } from '../services/githubAPI';
+import { searchUsers } from '../services/githubService';
 
 export const Search = () => {
-  const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({ username: '', location: '', repos: 0 });
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
-    setUsername(e.target.value);
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSearch = async () => {
+    setLoading(true);
+    setError('');
     try {
-      const user = await searchGitHubUser(username);
-      setUserData(user);
-      setError('');
+      const users = await searchUsers(formData);
+      setUserList(users.items);
     } catch (err) {
-      setError('User not found');
-      setUserData(null);
+      setError("No users found.");
+      setUserList([]);
     }
+    setLoading(false);
   };
 
   return (
     <div className="search-container">
       <input
         type="text"
-        placeholder="Search GitHub username"
-        value={username}
+        name="username"
+        placeholder="Username"
+        value={formData.username}
         onChange={handleInputChange}
       />
-      <button onClick={handleSearch}>Search</button>
+      <input
+        type="text"
+        name="location"
+        placeholder="Location"
+        value={formData.location}
+        onChange={handleInputChange}
+      />
+      <input
+        type="number"
+        name="repos"
+        placeholder="Min Repositories"
+        value={formData.repos}
+        onChange={handleInputChange}
+      />
+      <button onClick={handleSearch}>Advanced Search</button>
 
+      {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {userData && (
-        <div className="user-details">
-          <h2>{userData.name}</h2>
-          <p>Username: {userData.login}</p>
-          <p>Followers: {userData.followers}</p>
-          <p>Following: {userData.following}</p>
-          <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-            View Profile
-          </a>
+      {userList.length > 0 && (
+        <div className="user-list">
+          {userList.map((user) => (
+            <div key={user.id}>
+              <img src={user.avatar_url} alt={user.login} />
+              <h3>{user.login}</h3>
+              <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+                View Profile
+              </a>
+            </div>
+          ))}
         </div>
       )}
     </div>
