@@ -1,3 +1,4 @@
+// src/components/Search.jsx
 import React, { useState } from 'react';
 import { searchUsers } from '../services/githubService';
 
@@ -7,12 +8,15 @@ export const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // target.value to capture input value
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSearch = async () => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // preventDefault to stop form from reloading the page
     setLoading(true);
     setError('');
     try {
@@ -27,28 +31,30 @@ export const Search = () => {
 
   return (
     <div className="search-container">
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleInputChange}
-      />
-      <input
-        type="text"
-        name="location"
-        placeholder="Location"
-        value={formData.location}
-        onChange={handleInputChange}
-      />
-      <input
-        type="number"
-        name="repos"
-        placeholder="Min Repositories"
-        value={formData.repos}
-        onChange={handleInputChange}
-      />
-      <button onClick={handleSearch}>Advanced Search</button>
+      <form onSubmit={handleSubmit}> {/* onSubmit to handle form submission */}
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleInputChange} // Handle changes with target.value
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={formData.location}
+          onChange={handleInputChange}
+        />
+        <input
+          type="number"
+          name="repos"
+          placeholder="Min Repositories"
+          value={formData.repos}
+          onChange={handleInputChange}
+        />
+        <button type="submit">Advanced Search</button> {/* Submit button */}
+      </form>
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
