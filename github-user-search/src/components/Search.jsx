@@ -9,19 +9,17 @@ export const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target; // Use target.value to capture input value
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle basic search for specific username
   const handleBasicSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setUserData(null); // Clear previous user data
-    setUserList([]); // Clear previous search results
+    setUserData(null);
+    setUserList([]);
 
     try {
       const user = await fetchUserData(formData.username);
@@ -29,84 +27,92 @@ export const Search = () => {
     } catch (err) {
       setError("Looks like we can't find the user.");
     } finally {
-      setLoading(false); // Ensure loading state is reset
+      setLoading(false);
     }
   };
 
-  // Handle form submission for advanced search
   const handleAdvancedSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setUserList([]); // Clear previous search results
-    setUserData(null); // Clear previous user data
+    setUserList([]);
+    setUserData(null);
 
     try {
       const users = await searchUsers(formData);
       if (users.items.length === 0) {
-        setError("Looks like we cant find the user");
+        setError("Looks like we can't find any users.");
       } else {
         setUserList(users.items);
       }
     } catch (err) {
-      setError("Looks like we can't find any users.");
+      setError("Looks like we cant find the user");
     } finally {
-      setLoading(false); // Ensure loading state is reset
+      setLoading(false);
     }
   };
 
   return (
-    <div className="search-container">
-      <form onSubmit={handleBasicSearch}>
+    <div className="search-container p-4 max-w-md mx-auto">
+      <form className="mb-4" onSubmit={handleBasicSearch}>
         <input
           type="text"
           name="username"
           placeholder="Search GitHub username"
           value={formData.username}
-          onChange={handleInputChange} // target.value is used here
+          onChange={handleInputChange}
+          className="p-2 border border-gray-300 rounded w-full mb-2"
         />
-        <button type="submit">Search User</button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+          Search User
+        </button>
       </form>
 
-      <form onSubmit={handleAdvancedSearch}>
+      <form onSubmit={handleAdvancedSearch} className="mb-4">
         <input
           type="text"
           name="location"
           placeholder="Location"
           value={formData.location}
-          onChange={handleInputChange} // target.value is used here
+          onChange={handleInputChange}
+          className="p-2 border border-gray-300 rounded w-full mb-2"
         />
         <input
           type="number"
           name="repos"
           placeholder="Min Repositories"
           value={formData.repos}
-          onChange={handleInputChange} // target.value is used here
+          onChange={handleInputChange}
+          className="p-2 border border-gray-300 rounded w-full mb-2"
         />
-        <button type="submit">Advanced Search</button>
+        <button type="submit" className="bg-green-500 text-white p-2 rounded w-full">
+          Advanced Search
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>} {/* Show loading message */}
-      {error && <p className="text-red-500">{error}</p>} {/* Show error message */}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
-      {userData && ( // Conditional rendering for user data
-        <div className="user-details">
-          <img src={userData.avatar_url} alt={userData.login} />
-          <h2>{userData.name || userData.login}</h2>
+      {userData && (
+        <div className="user-details my-4 p-4 border border-gray-300 rounded">
+          <img src={userData.avatar_url} alt={userData.login} className="w-16 h-16" />
+          <h2 className="text-lg">{userData.name || userData.login}</h2>
           <p>{userData.bio}</p>
-          <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
+          <a href={userData.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
             View GitHub Profile
           </a>
         </div>
       )}
 
-      {userList.length > 0 && ( // Conditional rendering for advanced search results
-        <div className="user-list">
+      {userList.length > 0 && (
+        <div className="user-list my-4">
           {userList.map((user) => (
-            <div key={user.id}>
-              <img src={user.avatar_url} alt={user.login} />
-              <h3>{user.login}</h3>
-              <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+            <div key={user.id} className="user-item p-4 border border-gray-300 rounded mb-2">
+              <img src={user.avatar_url} alt={user.login} className="w-16 h-16 inline-block" />
+              <h3 className="inline-block ml-2">{user.login}</h3>
+              <p>Location: {user.location || 'N/A'}</p>
+              <p>Repositories: {user.public_repos}</p>
+              <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
                 View Profile
               </a>
             </div>
