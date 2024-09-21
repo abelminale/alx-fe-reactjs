@@ -11,7 +11,7 @@ export const Search = () => {
 
   // Handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Use target.value to capture input value
     setFormData({ ...formData, [name]: value });
   };
 
@@ -25,7 +25,7 @@ export const Search = () => {
       setUserData(user);
       setUserList([]); // Clear advanced search results if doing basic search
     } catch (err) {
-      setError("Looks like we can't find the user."); // Set error message
+      setError("Looks like we can't find the user.");
       setUserData(null);
     }
     setLoading(false);
@@ -39,13 +39,13 @@ export const Search = () => {
     try {
       const users = await searchUsers(formData);
       if (users.items.length === 0) {
-        setError("Looks like we can't find any users."); // Set error message for no results
+        setError("Looks like we can't find any users.");
         setUserList([]);
       } else {
         setUserList(users.items);
       }
     } catch (err) {
-      setError("Looks like we can't find any users."); // Set error message for API error
+      setError("Looks like we can't find any users.");
       setUserList([]);
     }
     setLoading(false);
@@ -59,7 +59,7 @@ export const Search = () => {
           name="username"
           placeholder="Search GitHub username"
           value={formData.username}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // target.value is used here
         />
         <button type="submit">Search User</button>
       </form>
@@ -70,14 +70,14 @@ export const Search = () => {
           name="location"
           placeholder="Location"
           value={formData.location}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // target.value is used here
         />
         <input
           type="number"
           name="repos"
           placeholder="Min Repositories"
           value={formData.repos}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // target.value is used here
         />
         <button type="submit">Advanced Search</button>
       </form>
